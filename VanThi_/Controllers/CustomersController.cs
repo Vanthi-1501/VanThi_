@@ -59,7 +59,7 @@ namespace VanThi.Controllers
             _context.Customers.Remove(customer);
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Đã xoá khách hàng" });
+            return Ok(new { message = "Đã xoá khách hàng thi van" });
         }
     }
 }
