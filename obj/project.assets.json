@@ -8126,11 +8126,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "H:\\VanThi_\\VanThi_\\VanThi_.csproj",
+      "projectUniqueName": "H:\\VanThi_\\VanThi_.csproj",
       "projectName": "VanThi_",
-      "projectPath": "H:\\VanThi_\\VanThi_\\VanThi_.csproj",
+      "projectPath": "H:\\VanThi_\\VanThi_.csproj",
       "packagesPath": "C:\\Users\\thiva\\.nuget\\packages\\",
-      "outputPath": "H:\\VanThi_\\VanThi_\\obj\\",
+      "outputPath": "H:\\VanThi_\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
