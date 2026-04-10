@@ -1,0 +1,6 @@
+@VanThi__HostAddress = http://localhost:5050
+
+GET {{VanThi__HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
