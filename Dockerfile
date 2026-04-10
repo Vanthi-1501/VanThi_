@@ -1,9 +1,10 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
+WORKDIR /src
 
-COPY . ./
-RUN dotnet restore
-RUN dotnet publish -c Release -o out
+COPY . .
+
+RUN dotnet restore VanThi_.sln
+RUN dotnet publish VanThi_.sln -c Release -o /app/out
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
