@@ -259,3 +259,15 @@ H:\VanThi_\VanThi_\obj\Debug\net8.0\refint\VanThi_.dll
 H:\VanThi_\VanThi_\obj\Debug\net8.0\VanThi_.pdb
 H:\VanThi_\VanThi_\obj\Debug\net8.0\VanThi_.genruntimeconfig.cache
 H:\VanThi_\VanThi_\obj\Debug\net8.0\ref\VanThi_.dll
+H:\VanThi_\obj\Debug\net8.0\VanThi_.csproj.AssemblyReference.cache
+H:\VanThi_\obj\Debug\net8.0\rpswa.dswa.cache.json
+H:\VanThi_\obj\Debug\net8.0\VanThi_.GeneratedMSBuildEditorConfig.editorconfig
+H:\VanThi_\obj\Debug\net8.0\VanThi_.AssemblyInfoInputs.cache
+H:\VanThi_\obj\Debug\net8.0\VanThi_.AssemblyInfo.cs
+H:\VanThi_\obj\Debug\net8.0\VanThi_.csproj.CoreCompileInputs.cache
+H:\VanThi_\obj\Debug\net8.0\VanThi_.MvcApplicationPartsAssemblyInfo.cs
+H:\VanThi_\obj\Debug\net8.0\VanThi_.MvcApplicationPartsAssemblyInfo.cache
+H:\VanThi_\obj\Debug\net8.0\VanThi_.sourcelink.json
+H:\VanThi_\obj\Debug\net8.0\VanThi_.dll
+H:\VanThi_\obj\Debug\net8.0\refint\VanThi_.dll
+H:\VanThi_\obj\Debug\net8.0\VanThi_.pdb
