@@ -149,5 +149,57 @@ namespace VanThi.Controllers
             await _context.SaveChangesAsync();
             return Ok(new { message = "Đã từ chối đơn đặt phòng." });
         }
+
+        [HttpPost("{id}/checkout")]
+        public async Task<IActionResult> CheckOut(int id)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                // Tìm Stay đang hoạt động của Booking này
+                var stay = await _context.Stays
+                    .Include(s => s.Booking)
+                    .Include(s => s.Room)
+                    .FirstOrDefaultAsync(s => s.BookingId == id && s.IsActive);
+
+                if (stay == null) return NotFound("Không tìm thấy thông tin lưu trú đang hoạt động cho đơn đặt phòng này.");
+
+                // 1. Cập nhật thông tin lưu trú
+                stay.ActualCheckOut = DateTime.Now;
+                stay.IsActive = false;
+
+                // 2. Tính tiền dịch vụ
+                var serviceOrders = await _context.ServiceOrders
+                    .Where(so => so.StayId == stay.Id)
+                    .Include(so => so.Service)
+                    .ToListAsync();
+
+                decimal serviceTotal = serviceOrders.Sum(so => so.Quantity * so.Service.Price);
+
+                // 3. Cập nhật Invoice
+                var invoice = await _context.Invoices.FirstOrDefaultAsync(i => i.StayId == stay.Id);
+                if (invoice != null)
+                {
+                    invoice.ServiceCharges = serviceTotal;
+                    invoice.TotalAmount = invoice.RoomCharges + serviceTotal;
+                    // Tạm thời để status là Unpaid hoặc chuyển sang Paid tùy quy trình, 
+                    // nhưng CheckOut thành công thì booking hoàn tất.
+                }
+
+                // 4. Cập nhật trạng thái Booking và Phòng
+                if (stay.Booking != null) stay.Booking.Status = BookingStatus.Completed;
+                if (stay.Room != null) stay.Room.Status = RoomStatus.Cleaning;
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return Ok(new { message = "Trả phòng thành công", totalAmount = invoice?.TotalAmount });
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return StatusCode(500, "Lỗi hệ thống: " + ex.Message);
+            }
+        }
     }
-}
+}
