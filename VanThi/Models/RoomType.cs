@@ -18,5 +18,6 @@ namespace VanThi.Models
         [JsonIgnore]
         public ICollection<Room> Rooms { get; set; } = new List<Room>();
         public decimal Price { get; set; }
+        public string? Image { get; set; }
     }
 }

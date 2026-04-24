@@ -19,6 +19,7 @@ namespace VanThi.Data
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<ServiceOrder> ServiceOrders { get; set; }
+        public DbSet<BookingService> BookingServices { get; set; }
         public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -46,6 +47,13 @@ namespace VanThi.Data
                 .WithMany()
                 .HasForeignKey(so => so.StayId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            // Seed Dịch vụ ăn uống
+            modelBuilder.Entity<Service>().HasData(
+                new Service { Id = 1, Name = "Ăn sáng", Price = 10 },
+                new Service { Id = 2, Name = "Ăn trưa", Price = 20 },
+                new Service { Id = 3, Name = "Ăn tối", Price = 30 }
+            );
         }
     }
 }

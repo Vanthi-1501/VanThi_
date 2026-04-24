@@ -62,11 +62,31 @@ namespace VanThi.Controllers
             // Tính toán giá ước tính
             var days = (booking.CheckOut - booking.CheckIn).TotalDays;
             if (days < 1) days = 1;
-            booking.TotalPrice = (decimal)days * room.RoomType.Price;
+            decimal roomPrice = (decimal)days * room.RoomType.Price;
+            
+            decimal servicePrice = 0;
+            if (booking.ServiceIds != null && booking.ServiceIds.Count > 0)
+            {
+                servicePrice = await _context.Services
+                    .Where(s => booking.ServiceIds.Contains(s.Id))
+                    .SumAsync(s => s.Price);
+            }
+
+            booking.TotalPrice = roomPrice + servicePrice;
             booking.Status = BookingStatus.Pending;
 
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
+
+            // Lưu các dịch vụ đã chọn vào DB
+            if (booking.ServiceIds != null && booking.ServiceIds.Count > 0)
+            {
+                foreach (var sId in booking.ServiceIds)
+                {
+                    _context.BookingServices.Add(new BookingService { BookingId = booking.Id, ServiceId = sId });
+                }
+                await _context.SaveChangesAsync();
+            }
 
             return CreatedAtAction(nameof(GetBooking), new { id = booking.Id }, booking);
         }
@@ -99,12 +119,27 @@ namespace VanThi.Controllers
                 _context.Stays.Add(stay);
                 await _context.SaveChangesAsync();
 
+                // 2.5 Chuyển BookingServices thành ServiceOrders
+                var bookingServices = await _context.BookingServices.Where(bs => bs.BookingId == booking.Id).ToListAsync();
+                foreach (var bs in bookingServices)
+                {
+                    _context.ServiceOrders.Add(new ServiceOrder
+                    {
+                        StayId = stay.Id,
+                        ServiceId = bs.ServiceId,
+                        Quantity = 1,
+                        OrderDate = DateTime.Now
+                    });
+                }
+                await _context.SaveChangesAsync();
+
                 // 3. Khởi tạo Invoice nháp
                 var invoice = new Invoice
                 {
                     StayId = stay.Id,
-                    RoomCharges = booking.TotalPrice,
-                    TotalAmount = booking.TotalPrice, // Gốc tiền phòng, service sẽ cộng sau
+                    RoomCharges = booking.TotalPrice - (bookingServices.Count > 0 ? (decimal)await _context.Services.Where(s => bookingServices.Select(x => x.ServiceId).Contains(s.Id)).SumAsync(s => s.Price) : 0), // Tính lại room charges gốc
+                    ServiceCharges = (bookingServices.Count > 0 ? (decimal)await _context.Services.Where(s => bookingServices.Select(x => x.ServiceId).Contains(s.Id)).SumAsync(s => s.Price) : 0),
+                    TotalAmount = booking.TotalPrice,
                     Status = InvoiceStatus.Unpaid
                 };
                 _context.Invoices.Add(invoice);

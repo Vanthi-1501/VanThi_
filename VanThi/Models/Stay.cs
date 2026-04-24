@@ -13,5 +13,6 @@ namespace VanThi.Models
 
         public Booking? Booking { get; set; }
         public Room? Room { get; set; }
+        public ICollection<ServiceOrder> ServiceOrders { get; set; } = new List<ServiceOrder>();
     }
 }

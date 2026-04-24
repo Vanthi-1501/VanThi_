@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VanThi.Data;
 
@@ -11,9 +12,11 @@ using VanThi.Data;
 namespace VanThi_.Migrations
 {
     [DbContext(typeof(HotelDbContext))]
-    partial class HotelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260424064946_AddFoodServices")]
+    partial class AddFoodServices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,29 +62,6 @@ namespace VanThi_.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("Bookings");
-                });
-
-            modelBuilder.Entity("VanThi.Models.BookingService", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BookingId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ServiceId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookingId");
-
-                    b.HasIndex("ServiceId");
-
-                    b.ToTable("BookingServices");
                 });
 
             modelBuilder.Entity("VanThi.Models.Customer", b =>
@@ -209,9 +189,6 @@ namespace VanThi_.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -286,16 +263,11 @@ namespace VanThi_.Migrations
                     b.Property<int>("StayId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StayId1")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ServiceId");
 
                     b.HasIndex("StayId");
-
-                    b.HasIndex("StayId1");
 
                     b.ToTable("ServiceOrders");
                 });
@@ -384,25 +356,6 @@ namespace VanThi_.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("VanThi.Models.BookingService", b =>
-                {
-                    b.HasOne("VanThi.Models.Booking", "Booking")
-                        .WithMany()
-                        .HasForeignKey("BookingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("VanThi.Models.Service", "Service")
-                        .WithMany()
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Booking");
-
-                    b.Navigation("Service");
-                });
-
             modelBuilder.Entity("VanThi.Models.Invoice", b =>
                 {
                     b.HasOne("VanThi.Models.Stay", "Stay")
@@ -450,10 +403,6 @@ namespace VanThi_.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("VanThi.Models.Stay", null)
-                        .WithMany("ServiceOrders")
-                        .HasForeignKey("StayId1");
-
                     b.Navigation("Service");
 
                     b.Navigation("Stay");
@@ -486,11 +435,6 @@ namespace VanThi_.Migrations
             modelBuilder.Entity("VanThi.Models.RoomType", b =>
                 {
                     b.Navigation("Rooms");
-                });
-
-            modelBuilder.Entity("VanThi.Models.Stay", b =>
-                {
-                    b.Navigation("ServiceOrders");
                 });
 #pragma warning restore 612, 618
         }

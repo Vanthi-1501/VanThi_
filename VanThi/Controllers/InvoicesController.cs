@@ -39,6 +39,9 @@ namespace VanThi.Controllers
                 .Include(i => i.Stay)
                     .ThenInclude(s => s.Room)
                         .ThenInclude(r => r.RoomType)
+                .Include(i => i.Stay)
+                    .ThenInclude(s => s.ServiceOrders)
+                        .ThenInclude(so => so.Service)
                 .FirstOrDefaultAsync(i => i.Id == id);
 
             if (invoice == null) return NotFound();

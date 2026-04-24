@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using VanThi.Models;
 
 namespace VanThi.Models
@@ -13,6 +14,9 @@ namespace VanThi.Models
         public decimal TotalPrice { get; set; }
         public BookingStatus Status { get; set; } = BookingStatus.Pending;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        [NotMapped]
+        public List<int>? ServiceIds { get; set; }
 
         public Room? Room { get; set; }
         public Customer? Customer { get; set; }
