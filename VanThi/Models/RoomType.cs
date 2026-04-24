@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace VanThi.Models
 
         // ❌ tránh vòng lặp JSON
         [JsonIgnore]
-        public ICollection<Room> Rooms { get; set; }
-        public decimal Price { get; internal set; }
+        public ICollection<Room> Rooms { get; set; } = new List<Room>();
+        public decimal Price { get; set; }
     }
 }

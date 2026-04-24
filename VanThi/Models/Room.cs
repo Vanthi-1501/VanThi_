@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace VanThi.Models
@@ -8,10 +8,13 @@ namespace VanThi.Models
         [Key]
         public int Id { get; set; }
 
-        public string Status { get; set; }
+        [Required]
+        public string Code { get; set; }
+
+        public RoomStatus Status { get; set; } = RoomStatus.Available;
 
         public int RoomTypeId { get; set; }
-
-        public RoomType RoomType { get; set; }
+        
+        public RoomType? RoomType { get; set; }
     }
 }

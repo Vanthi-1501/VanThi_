@@ -14,9 +14,23 @@ namespace VanThi
             builder.Services.AddDbContext<HotelDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            // Thêm cấu hình CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+
             builder.Services.AddSignalR();
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(options => {
+                    options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+                });
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -33,11 +47,20 @@ namespace VanThi
             // Re-enable HTTPS redirection if needed, but often Render handles SSL at load balancer
             // app.UseHttpsRedirection(); 
             
+            
+            app.UseCors("AllowAll"); // Áp dụng CORS
             app.UseAuthorization();
             app.MapControllers();
 
-            var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
-            app.Run($"http://0.0.0.0:{port}");
+            var port = Environment.GetEnvironmentVariable("PORT");
+            if (string.IsNullOrEmpty(port))
+            {
+                app.Run();
+            }
+            else
+            {
+                app.Run($"http://0.0.0.0:{port}");
+            }
         }
     }
 }
